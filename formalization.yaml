@@ -1,0 +1,297 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Regularity structures and dynamical Phi^4_3"
+  description: >-
+    A Lean 4 / Mathlib formalization of the local well-posedness and convergence of
+    the renormalised dynamical Phi^4_3 model on the three-dimensional torus, after
+    Hairer's Theorem 1.15. For smooth initial data, explicit renormalisation
+    constants built from the massive heat kernel, and every exponent eta in
+    (-2/3, -1/2), the solutions of the equation driven by mollified space-time white
+    noise converge in probability in the Hölder–Besov space C^eta up to the maximal
+    existence time of the limit, and the limit does not depend on the mollifier. A
+    standalone library proves the general theory used: the reconstruction theorem
+    (Hairer, Theorem 3.10; Hoshino, Theorem 4.1), weighted reconstruction, the
+    multilevel Schauder estimate (Hairer, Theorem 5.12), maximal solutions, and
+    Malliavin calculus for white noise.
+  authors:
+    - "Scott Armstrong"
+  responsible_maintainers:
+    - "Scott Armstrong"
+  affiliations:
+    - "Scott Armstrong: CNRS and Laboratoire Jacques-Louis Lions, Sorbonne Université; Courant Institute School of Mathematics, Computing, and Data Science, New York University"
+  license: "Apache-2.0"
+  funding:
+    - "Scott Armstrong was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme, grant agreement No. 101200828."
+
+classification:
+  arxiv: ["math.PR", "math.AP"]
+  msc2020: ["60H17", "60H15", "81T08"]
+
+sources:
+  - title: "A theory of regularity structures"
+    authors:
+      - "Martin Hairer"
+    type: "paper"
+    location: "Inventiones mathematicae 198 (2014), 269-504; arXiv:1303.5113v4"
+    relationship: "formalizes"
+    note: "Theorem 1.15 (as Theorem A, with smooth initial data and explicit constants), Theorem 3.10, Theorem 5.12 (first part and (5.17)), and the patching argument behind Proposition 7.11."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "A semigroup approach to the reconstruction theorem and the multilevel Schauder estimate"
+    authors:
+      - "Masato Hoshino"
+    type: "paper"
+    location: "arXiv:2310.07396v2"
+    relationship: "formalizes"
+    note: "Theorem 4.1 (reconstruction for coherent germs and its weighted form); the semigroup formulation of reconstruction and of the Schauder estimate."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "The BPHZ theorem for regularity structures via the spectral gap inequality"
+    authors:
+      - "Martin Hairer"
+      - "Rhys Steele"
+    type: "paper"
+    location: "arXiv:2301.10081v3"
+    relationship: "adapts"
+    note: "The spectral-gap approach to the stochastic estimates, adapted to space-periodic noise; Definition 2.20 and Remark 2.22 (closability of the Malliavin derivative)."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "Random models on regularity-integrability structures"
+    authors:
+      - "Ismaël Bailleul"
+      - "Masato Hoshino"
+    type: "paper"
+    location: "arXiv:2310.10202v4"
+    relationship: "background"
+    note: "Methodological comparison for the convergence of the renormalised models."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "Renormalised dynamical Phi^4_3 on the three-torus: the statement formalised in Lean"
+    authors:
+      - "Scott Armstrong"
+    type: "other"
+    location: "docs/statement.pdf in this repository"
+    relationship: "formalizes"
+    note: "The self-contained statement of Theorem A, Proposition 3.1 and Lemma 4.1, with the comparison to Hairer's Theorem 1.15."
+    license: "Apache-2.0"
+    author_endorsement: "endorsed"
+
+status:
+  scope: >-
+    Complete for the results listed in main_results. Theorem A has smooth initial
+    data, the explicit constants of the statement, convergence up to the maximal
+    existence time of the limit, and mollifier independence for these constants;
+    rough initial data in C^alpha are not covered. The library statements of
+    reconstruction and the Schauder estimate are formulated for regularity
+    structures with a finite graded basis, distributions regularised by a
+    semigroup, and global bounds on the model and the modelled distribution
+    (Hairer's Theorems 3.10 and 5.12 are local). Reconstruction assumes gamma > 0;
+    its test-function bound and uniqueness statement assume every degree below
+    gamma exceeds -4, and uniqueness is among measurable distributions with a
+    global power bound of exponent above -4. The Schauder statements are for the parabolic heat kernel
+    with gain two, require every degree below gamma to exceed -2 (excluding the
+    Phi^4_3 noise symbol), require the sector to be spanned by basis vectors (a
+    coordinate sector), have an integration map without polynomial component and
+    non-integrality conditions that can be stronger, and state only the first part
+    of Theorem 5.12; they assume joint measurability of the model, and the identity
+    (5.17) also assumes a global model bound up to level gamma + 2. The maximal-solution statements are the abstract patching argument behind
+    Proposition 7.11.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "RegularityStructures.Phi43.Statements.theoremA"
+      file: "Phi43Statements/TheoremA.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.proposition31"
+      file: "Phi43Statements/Proposition31.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.exists_whiteNoise"
+      file: "Phi43Statements/WhiteNoiseExists.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.regularisedNoise_exists_unique"
+      file: "Phi43Statements/RegularisedNoiseExistsUnique.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.constants_finite"
+      file: "Phi43Statements/ConstantsFinite.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.classicalSolution_exists_unique"
+      file: "Phi43Statements/ClassicalWellPosed.lean"
+      comparator_config: "comparators/TheoremA/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.classicalSolution_continuousOn"
+      file: "Phi43Statements/ClassicalSolutionContinuity.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Phi43.Statements.classicalSolution_measurable"
+      file: "Phi43Statements/ClassicalSolutionMeasurability.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.exists_reconstruction"
+      file: "RegularityStructures/Statements/ModelReconstruction.lean"
+      comparator_config: "comparators/Reconstruction/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.abs_reconstruct_sub_reconstruct_le"
+      file: "RegularityStructures/Statements/ModelReconstructionLipschitz.lean"
+      comparator_config: "comparators/Reconstruction/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.abs_pairing_rescaledTestFunction_le"
+      file: "RegularityStructures/Statements/ReconstructionTestFunctionBound.lean"
+      comparator_config: "comparators/Reconstruction/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.eq_reconstruct_of_abs_pairing_le"
+      file: "RegularityStructures/Statements/ReconstructionUniqueness.lean"
+      comparator_config: "comparators/Reconstruction/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.RegularisingSemigroup.exists_reconstruction"
+      file: "RegularityStructures/Statements/GermReconstruction.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.RegularisingSemigroup.exists_reconstruction_weighted"
+      file: "RegularityStructures/Statements/WeightedReconstruction.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.kGamma_mem_modelledDistributions"
+      file: "RegularityStructures/Statements/SchauderEstimate.lean"
+      comparator_config: "comparators/Schauder/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.Model.reconstruct_kGamma"
+      file: "RegularityStructures/Statements/SchauderReconstruction.lean"
+      comparator_config: "comparators/Schauder/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.exists_maximal_solution"
+      file: "RegularityStructures/Statements/MaximalSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.exists_global_solution_of_bound"
+      file: "RegularityStructures/Statements/GlobalSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.malliavin_derivative_closable"
+      file: "RegularityStructures/Statements/MalliavinClosable.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "RegularityStructures.Statements.malliavin_spectral_gap"
+      file: "RegularityStructures/Statements/MalliavinSpectralGap.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "claude-opus-5-5"
+        - "claude-sonnet-5-5"
+        - "claude-fable-5-1"
+        - "gpt-5.6-luna"
+        - "gpt-6.1-sol"
+      framework: >-
+        Claude Code (Claude Opus 5.5 coordinating, Claude Sonnet 5.5, Claude Fable
+        5.1) and Codex (GPT-5.6 Luna, GPT-6.1 Sol), under the author's supervision.
+      tool_setup: >-
+        Lean 4 and Mathlib v4.35.0-rc2. Every public statement was written first,
+        compared with the sources by an independent model review, and approved by
+        the author before its proof was developed. Verification uses full builds from
+        a clean checkout and axiom checks of the main results.
+      cost:
+        wall_time: "about three days of development (23 to 25 October 2026) plus release preparation"
+        spend_usd: "not separately tracked (ChatGPT Pro and Claude Max subscriptions)"
+        hardware: "one 8-CPU / 30 GB RAM Linux machine"
+      prompting_notes: >-
+        The author determined the scope and the statements, chose the proof routes,
+        and approved every public statement. Gaps in the printed proofs were filled
+        by arguments proposed by the models and checked by separate model reviews
+        before they were formalized.
+  spend_usd: "not separately tracked (ChatGPT Pro and Claude Max subscriptions)"
+  notes: >-
+    All Lean code was written by the listed models under the supervision of the
+    author. Every proof is checked by the Lean kernel; the library contains no sorry
+    and no custom axiom.
+
+fidelity:
+  divergences: >-
+    Theorem A has smooth initial data instead of data in C^alpha, explicit constants
+    built from the massive heat kernel instead of suitably chosen constants, and
+    convergence up to the maximal existence time of the limit instead of stopped
+    processes. Reconstruction and the Schauder estimate are proved with a
+    regularising semigroup, a finite graded basis and global bounds, with the
+    degree restrictions listed under status.scope. docs/ERRATA-AND-DEVIATIONS.md
+    records every erratum and deviation with its effect on the stated theorems.
+
+review:
+  status: "author-verified"
+  reviewers:
+    - "Scott Armstrong"
+  notes: >-
+    Lean checks each proof against its formal statement. The author reviewed that
+    the statements are the intended theorems. Each public statement was compared
+    with the sources by independent model reviews before its proof was accepted.
+    This is not external peer review.
+
+alignment:
+  - source: "Hairer, A theory of regularity structures, Theorem 1.15"
+    lean: "RegularityStructures.Phi43.Statements.theoremA"
+    note: "Smooth initial data; explicit constants; convergence in probability up to the maximal existence time; mollifier independence."
+  - source: "The statement (docs/statement.pdf), Proposition 3.1"
+    lean: "RegularityStructures.Phi43.Statements.proposition31"
+    note: "Conditions (A1)-(A3) determine the limit."
+  - source: "The statement (docs/statement.pdf), Lemma 4.1 (W1)-(W5)"
+    lean: "RegularityStructures.Phi43.Statements.exists_whiteNoise"
+    note: "The objects over which Theorem A quantifies exist; the other items are regularisedNoise_exists_unique, constants_finite, classicalSolution_exists_unique, classicalSolution_continuousOn and classicalSolution_measurable."
+  - source: "Hairer, A theory of regularity structures, Theorem 3.10"
+    lean: "RegularityStructures.Statements.Model.exists_reconstruction"
+    note: "With a regularising semigroup in place of wavelets, after Hoshino, Theorem 4.1; the bound (3.4) is abs_reconstruct_sub_reconstruct_le."
+  - source: "Hoshino, Theorem 4.1"
+    lean: "RegularityStructures.Statements.RegularisingSemigroup.exists_reconstruction"
+    note: "Reconstruction for coherent germs; the weighted form is exists_reconstruction_weighted."
+  - source: "Hairer, A theory of regularity structures, Theorem 5.12"
+    lean: "RegularityStructures.Statements.Model.kGamma_mem_modelledDistributions"
+    note: "First part: the operator K_gamma maps D^gamma into D^(gamma+2); (5.17) is reconstruct_kGamma."
+  - source: "Hairer, A theory of regularity structures, Proposition 7.11"
+    lean: "RegularityStructures.Statements.exists_maximal_solution"
+    note: "The abstract patching argument behind Proposition 7.11, for a solution relation with local existence, uniqueness, restriction and gluing."
+
+acknowledgements: >-
+  Scott Armstrong was supported by the European Research Council (ERC) under the
+  European Union's Horizon Europe research and innovation programme (grant agreement
+  No. 101200828). Built on Lean 4, Mathlib and Lake.
+

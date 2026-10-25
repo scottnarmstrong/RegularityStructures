@@ -1,0 +1,21 @@
+{
+  "challenge_module": "comparators.Reconstruction.Challenge",
+  "solution_module": "comparators.Reconstruction.Solution",
+  "theorem_names": [
+    "ReconstructionChallenge.exists_reconstruction",
+    "ReconstructionChallenge.reconstruct_sub_reconstruct_le",
+    "ReconstructionChallenge.abs_pairing_rescaledTestFunction_le",
+    "ReconstructionChallenge.eq_reconstruct_of_abs_pairing_le",
+    "ReconstructionChallenge.parabolicKernel_measurable",
+    "ReconstructionChallenge.parabolicKernel_integrable_moment",
+    "ReconstructionChallenge.parabolicKernel_moment_le",
+    "ReconstructionChallenge.parabolicKernel_semigroup"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

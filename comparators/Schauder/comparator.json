@@ -1,0 +1,21 @@
+{
+  "challenge_module": "comparators.Schauder.Challenge",
+  "solution_module": "comparators.Schauder.Solution",
+  "theorem_names": [
+    "SchauderChallenge.kGamma_mem_modelledDistributions",
+    "SchauderChallenge.reconstruct_kGamma",
+    "SchauderChallenge.schauder_series_summable",
+    "SchauderChallenge.exists_annBump",
+    "SchauderChallenge.parabolicKernel_measurable",
+    "SchauderChallenge.parabolicKernel_integrable_moment",
+    "SchauderChallenge.parabolicKernel_moment_le",
+    "SchauderChallenge.parabolicKernel_semigroup"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

@@ -1,0 +1,68 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite it as below."
+title: "RegularityStructures: a Lean 4 formalization of regularity structures and the dynamical Φ⁴₃ model"
+abstract: >-
+  A machine-checked Lean 4 / Mathlib formalization of the local well-posedness and
+  convergence of the renormalised dynamical Φ⁴₃ model on the three-dimensional torus,
+  after Hairer's Theorem 1.15 (A theory of regularity structures, 2014): for smooth
+  initial data and explicit renormalisation constants, the solutions of the equation
+  driven by mollified space-time white noise converge in probability in a negative
+  Hölder–Besov space up to the maximal existence time of the limit, and the limit does
+  not depend on the mollifier. A standalone library proves the general theory used:
+  the reconstruction theorem, weighted reconstruction, the multilevel Schauder estimate,
+  maximal solutions, and Malliavin calculus for white noise.
+  The development contains no sorry and no custom axiom.
+type: software
+version: "1.0.0"
+authors:
+  - family-names: Armstrong
+    given-names: Scott
+    affiliation: "CNRS and Laboratoire Jacques-Louis Lions, Sorbonne Université; Courant Institute School of Mathematics, Computing, and Data Science, New York University"
+keywords:
+  - Lean
+  - Mathlib
+  - formal verification
+  - regularity structures
+  - singular stochastic partial differential equations
+  - Φ⁴₃ model
+  - renormalisation
+  - stochastic quantisation
+license: Apache-2.0
+repository-code: "https://github.com/scottnarmstrong/RegularityStructures"
+references:
+  - type: article
+    title: "A theory of regularity structures"
+    authors:
+      - family-names: Hairer
+        given-names: Martin
+    journal: "Inventiones mathematicae"
+    volume: 198
+    start: 269
+    end: 504
+    year: 2014
+    identifiers:
+      - type: other
+        value: "arXiv:1303.5113"
+    url: "https://arxiv.org/abs/1303.5113v4"
+  - type: article
+    title: "A semigroup approach to the reconstruction theorem and the multilevel Schauder estimate"
+    authors:
+      - family-names: Hoshino
+        given-names: Masato
+    year: 2025
+    identifiers:
+      - type: other
+        value: "arXiv:2310.07396"
+    url: "https://arxiv.org/abs/2310.07396v2"
+  - type: article
+    title: "The BPHZ theorem for regularity structures via the spectral gap inequality"
+    authors:
+      - family-names: Hairer
+        given-names: Martin
+      - family-names: Steele
+        given-names: Rhys
+    year: 2023
+    identifiers:
+      - type: other
+        value: "arXiv:2301.10081"
+    url: "https://arxiv.org/abs/2301.10081v3"

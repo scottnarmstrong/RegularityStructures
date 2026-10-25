@@ -1,0 +1,79 @@
+/-
+Copyright (c) 2026 Scott Armstrong. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Scott Armstrong
+-/
+module
+
+public import RegularityStructures.BPHZ.CauchyInProbabilityDyadic
+public import RegularityStructures.BPHZ.CauchyInProbability
+public import RegularityStructures.BPHZ.CauchyMoment
+public import RegularityStructures.BPHZ.CauchyTransfer
+public import RegularityStructures.BPHZ.ChaosLimitMomentsAE
+public import RegularityStructures.BPHZ.ChaosLimitMomentsApprox
+public import RegularityStructures.BPHZ.ChaosLimitMomentsCauchySchwarz
+public import RegularityStructures.BPHZ.ChaosLimitMomentsCylinder
+public import RegularityStructures.BPHZ.ChaosLimitMomentsFieldIntegral
+public import RegularityStructures.BPHZ.ChaosLimitMomentsField
+public import RegularityStructures.BPHZ.ChaosLimitMoments
+public import RegularityStructures.BPHZ.ChaosLimitMomentsRiemannL2
+public import RegularityStructures.BPHZ.ChaosLimitMomentsRiemann
+public import RegularityStructures.BPHZ.ChaosLimitMomentsRiemannLimit
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationAE
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationField
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationInt
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationL2
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncation
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationLimit
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationSecond
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTruncationSlab
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTwoFieldsKernel
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTwoFieldsKernelTruncation
+public import RegularityStructures.BPHZ.ChaosLimitMomentsTwoFields
+public import RegularityStructures.BPHZ.GaussianIsserlis
+public import RegularityStructures.BPHZ.GaussianMatchings
+public import RegularityStructures.BPHZ.GaussianMatchingsRecursion
+public import RegularityStructures.BPHZ.GaussianPolynomialCalculus
+public import RegularityStructures.BPHZ.GaussianPolynomialDegree
+public import RegularityStructures.BPHZ.GaussianPolynomialEnergyStep
+public import RegularityStructures.BPHZ.GaussianPolynomialEnergyTower
+public import RegularityStructures.BPHZ.GaussianPolynomialEvenMoments
+public import RegularityStructures.BPHZ.GaussianPolynomialGenerator
+public import RegularityStructures.BPHZ.GaussianPolynomialHypercontractivity
+public import RegularityStructures.BPHZ.GaussianPolynomialIBP
+public import RegularityStructures.BPHZ.GaussianPolynomialLpGap
+public import RegularityStructures.BPHZ.GaussianPolynomialProjection
+public import RegularityStructures.BPHZ.GaussianPolynomialReversePoincare
+public import RegularityStructures.BPHZ.GaussianSteinProduct
+public import RegularityStructures.BPHZ.GaussianWickBlocksDiagram
+public import RegularityStructures.BPHZ.GaussianWickBlocksFour
+public import RegularityStructures.BPHZ.GaussianWickBlocksList
+public import RegularityStructures.BPHZ.GaussianWickBlocksPositions
+public import RegularityStructures.BPHZ.GaussianWickBlocksThree
+public import RegularityStructures.BPHZ.GaussianWickBlocksTwo
+public import RegularityStructures.BPHZ.GaussianWickDiagramIdentity
+public import RegularityStructures.BPHZ.GaussianWickDiagram
+public import RegularityStructures.BPHZ.GaussianWickMerge
+public import RegularityStructures.BPHZ.GaussianWickMonomial
+public import RegularityStructures.BPHZ.GaussianWickMonomialSpecial
+public import RegularityStructures.BPHZ.GaussianWickPositions
+public import RegularityStructures.BPHZ.GaussianWickProduct
+public import RegularityStructures.BPHZ.ModelNormTriangle
+public import RegularityStructures.BPHZ.SemigroupTestLattice
+public import RegularityStructures.BPHZ.SemigroupTestSecondMoment
+public import RegularityStructures.BPHZ.TreeI2Psi2DiagramAlg
+public import RegularityStructures.BPHZ.TreeI2Psi2DiagramLint
+public import RegularityStructures.BPHZ.TreeI2Psi2DiagramMultiAlg
+public import RegularityStructures.BPHZ.TreeI3Psi2ChaosOneParts
+public import RegularityStructures.BPHZ.TreeI3Psi2DiagramYoung
+public import RegularityStructures.BPHZ.WhiteNoiseChaosMoments
+public import RegularityStructures.BPHZ.WhiteNoiseChaosMomentsLimit
+public import RegularityStructures.BPHZ.WhiteNoiseChaosMomentsLinear
+
+/-!
+# BPHZ infrastructure (aggregator)
+
+Imports every module under `RegularityStructures/BPHZ/`: Gaussian polynomial moment equivalence, the
+Wick diagram formula, chaos limits and Cauchy sequences in probability. The singular kernel calculus
+and the tree diagram bounds of the Φ⁴₃ models are in `Phi43.BPHZAll`.
+-/

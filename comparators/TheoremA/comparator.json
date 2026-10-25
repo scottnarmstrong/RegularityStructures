@@ -1,0 +1,19 @@
+{
+  "challenge_module": "comparators.TheoremA.Challenge",
+  "solution_module": "comparators.TheoremA.Solution",
+  "theorem_names": [
+    "TheoremAChallenge.theoremA",
+    "TheoremAChallenge.phi43Limit_unique",
+    "TheoremAChallenge.exists_whiteNoise",
+    "TheoremAChallenge.regularisedNoise_exists_unique",
+    "TheoremAChallenge.classicalSolution_exists_unique",
+    "TheoremAChallenge.constants_finite"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

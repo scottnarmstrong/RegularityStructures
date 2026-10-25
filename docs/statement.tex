@@ -1,0 +1,278 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{microtype}
+\setlength{\emergencystretch}{1em}
+\usepackage{xcolor}
+\definecolor{paperlink}{RGB}{0,0,114}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linktoc=all,
+  linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink,pdfstartview=Fit,
+  pdftitle={Renormalised dynamical Phi43 on the three-torus: the formalised statement}}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=2em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=2.25em,itemsep=0.25em,topsep=0.35em}
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0pt}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Dynamical $\Phi^4_3$ on $\mathbb{T}^3$: the formalised statement}
+\fancyhead[R]{\small\thepage}
+\setlength{\headheight}{14pt}
+\numberwithin{equation}{section}
+\setcounter{tocdepth}{1}
+\date{}
+
+\theoremstyle{plain}
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[proposition]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\T}{\mathbb{T}^3}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Hil}{\mathcal{H}}
+\newcommand{\Mol}{\mathcal{M}}
+\newcommand{\Cs}{\mathcal{C}}
+\newcommand{\nf}[2]{#1/#2}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\dd}{\mathrm{d}}
+
+\title{Renormalised dynamical $\Phi^4_3$ on the three-torus\\[0.3em] \large The statement formalised in Lean}
+\author{Scott Armstrong}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{plain}
+
+\begin{abstract}
+This note states the headline theorem of the Lean formalisation \texttt{RegularityStructures}: the solutions of the regularised and renormalised $\Phi^4_3$ equation on~$\T$, driven by mollified space-time white noise and with explicitly defined counterterms, converge in probability up to the maximal existence time of the limit, and the limit does not depend on the mollifier. It also records the facts that make the statement meaningful, its relation to Hairer's Theorem~1.15, the conventions it fixes, and the comparison of its constants with Hairer's. The Lean statements in the directory \texttt{Phi43Statements} follow the numbering of this note.
+\end{abstract}
+
+
+\section{Introduction}
+
+The headline statement is meant to be checkable by a reader who knows parabolic equations and Gaussian processes but not regularity structures. It therefore mentions only classical solutions of a regularised equation, two explicit Gaussian integrals and an explicit norm. Models, modelled distributions, reconstruction and the spectral-gap inequality belong to the proof.
+
+Section~\ref{s.setting} fixes the setting and the definitions, and Section~\ref{s.statement} states Theorem~\ref{t.main}. Section~\ref{s.meaning} lists the facts that make the statement meaningful, Section~\ref{s.hairer} compares it with~\cite[Theorem~1.15]{Hai14}, Section~\ref{s.decisions} lists the conventions, and Section~\ref{s.verification} compares the constants and the convergence notion with Hairer's.
+
+\section{Setting}
+\label{s.setting}
+
+\paragraph{Torus and heat kernels.} Write $\T=\R^3/\Z^3$ with Lebesgue measure of total mass one, and equip $\R\times\T$ with the product measure. Space-time points are written $z=(t,x)$, and $\Delta=\sum_{i=1}^3\partial_{x_i}^2$. For $t>0$ let $\gamma_t(y):=(4\pi t)^{-\nf{3}{2}}\exp(-\nf{|y|^2}{4t})$ be the heat kernel on~$\R^3$, where $|y|$ is the Euclidean norm, and put
+\begin{equation}
+\label{e.heat}
+p_t(x) := \sum_{k\in\Z^3}\gamma_t(x+k)\,, \qquad x\in\R^3\,,
+\end{equation}
+a $\Z^3$-periodic function, hence a function on~$\T$; it is the kernel of~$e^{t\Delta}$. For $f\in C(\T)$ and $s>0$ write $(P_sf)(x):=\int_{\R^3}\gamma_s(y)f(x-y)\,\dd y$, with $x-y$ taken in~$\T$. Unfolding the sum~\eqref{e.heat} gives $(P_sf)(x)=\int_{\T}p_s(x-y)f(y)\,\dd y$. Since $\gamma_s$ is a probability density, $P_s$ is linear and $\sup_x|(P_sf)(x)|\le\sup_x|f(x)|$. The massive space-time heat kernel
+\begin{equation}
+\label{e.G}
+G(t,x) := \1_{t>0}\,e^{-t}\,p_t(x)\,, \qquad (t,x)\in\R\times\T\,,
+\end{equation}
+is the fundamental solution of $\partial_t-\Delta+1$; it is nonnegative and $\int_{\R\times\T}G=1$. It enters only the definition of the renormalisation constants. The equation itself contains~$\Delta$, and the unit mass in~$G$ is a normalisation (convention~\ref{c.mass} of Section~\ref{s.decisions}).
+
+\paragraph{Negative-order norm.} The limit is a distribution, so convergence is measured in a norm of negative order. We use the heat-semigroup form of the Hölder--Besov norm.
+
+\begin{definition}
+\label{d.norm}
+For $\eta<0$ and $f\in C(\T)$ put
+\begin{equation}
+\label{e.norm}
+\|f\|_{\eta} := \sup_{0<s\le 1} s^{-\nf{\eta}{2}}\,\sup_{x\in\T}|(P_sf)(x)|\,,
+\end{equation}
+and let $\Cs^\eta$ be the completion of $C(\T)$ with respect to~$\|\cdot\|_\eta$.
+\end{definition}
+
+Since $\sup_x|(P_sf)(x)|\le\|f\|_{L^\infty}$ and $s^{-\nf{\eta}{2}}\le1$ for $s\in(0,1]$, one has $\|f\|_\eta\le\|f\|_{L^\infty}$. If $\|f\|_\eta=0$, then $P_sf=0$ for all $s\in(0,1]$ and $f=\lim_{s\downarrow0}P_sf=0$ uniformly, so~\eqref{e.norm} is a norm. Smooth functions are dense in $C(\T)$ for the uniform norm, hence also dense in~$\Cs^\eta$. For $\eta<0$ the norm~\eqref{e.norm} is a standard equivalent norm for the Hölder--Besov space $B^\eta_{\infty,\infty}(\T)$, so $\Cs^\eta$ is the closure of the smooth functions there, and it contains $B^\alpha_{\infty,\infty}(\T)$ for every $\alpha>\eta$. This equivalence is not part of the statement.
+
+\paragraph{White noise.} Let $\Hil$ be the set of square-integrable functions on $\R\times\T$, and write $\langle h,g\rangle:=\int_{\R\times\T}hg$.
+
+\begin{definition}
+\label{d.noise}
+A \emph{space-time white noise} on a probability space $(\Omega,\mathcal{F},\Prob)$ is a family $W=(W(h))_{h\in\Hil}$ of real random variables such that, for all $n\in\N$ and $h_1,\dots,h_n\in\Hil$, the vector $(W(h_1),\dots,W(h_n))$ is centred Gaussian with $\E[W(h_i)W(h_j)]=\langle h_i,h_j\rangle$.
+\end{definition}
+
+Functions that agree almost everywhere give almost surely equal values, because $\E[(W(h)-W(g))^2]=\|h-g\|_{L^2}^2$. So $W$ is the usual isonormal Gaussian process on $L^2(\R\times\T)$, indexed by functions rather than by equivalence classes.
+
+\paragraph{Mollifiers and regularised noise.} The regularisation is a parabolic rescaling of a fixed space-time mollifier, periodised in space.
+
+\begin{definition}
+\label{d.mollifier}
+Let $\Mol$ be the set of $\rho\in C_c^\infty(\R\times\R^3)$ with $\int\rho=1$. For $\rho\in\Mol$ and $\varepsilon\in(0,1]$ put $\rho_\varepsilon(t,x):=\varepsilon^{-5}\rho(\varepsilon^{-2}t,\varepsilon^{-1}x)$, let $\rho_\varepsilon^\sharp(t,x):=\sum_{k\in\Z^3}\rho_\varepsilon(t,x+k)$ be its spatial periodisation, a smooth function on $\R\times\T$ with compact support in~$t$, and for $z\in\R\times\T$ put $\rho_{\varepsilon,z}(w):=\rho_\varepsilon^\sharp(z-w)$, an element of~$\Hil$.
+\end{definition}
+
+\begin{definition}
+\label{d.regnoise}
+Let $W$ be a space-time white noise and $\rho\in\Mol$. A \emph{regularised noise at scale~$\varepsilon$} is a map $\xi_\varepsilon\colon\Omega\times(\R\times\T)\to\R$ such that $\xi_\varepsilon(\omega,\cdot)\in C^\infty(\R\times\T)$ for every $\omega\in\Omega$, and such that for every $z\in\R\times\T$ the map $\xi_\varepsilon(\cdot,z)$ is $\mathcal{F}$-measurable and equal to $W(\rho_{\varepsilon,z})$ almost surely.
+\end{definition}
+
+\paragraph{Renormalisation constants.} The two counterterms are explicit Gaussian integrals built from $G$ and the mollifier.
+
+\begin{definition}
+\label{d.constants}
+For $\rho\in\Mol$ and $\varepsilon\in(0,1]$ put $G_\varepsilon(z):=\int_{\R\times\T}G(z-w)\rho^\sharp_\varepsilon(w)\,\dd w$ and $Q_\varepsilon(z):=\int_{\R\times\T}G_\varepsilon(z+w)\,G_\varepsilon(w)\,\dd w$, and define
+\begin{equation}
+\label{e.constants}
+C_1^\varepsilon := \int_{\R\times\T}G_\varepsilon(z)^2\,\dd z\,, \qquad C_2^\varepsilon := 2\int_{\R\times\T}G(z)\,Q_\varepsilon(z)^2\,\dd z\,.
+\end{equation}
+\end{definition}
+
+These are the two constants of~\cite[(10.33) and (10.41)]{Hai14}, with Hairer's truncated heat kernel replaced by~$G$. Their meaning is as follows. Let $\Psi_\varepsilon$ be the stationary solution of $(\partial_t-\Delta+1)\Psi_\varepsilon=\xi_\varepsilon$. Then $\Psi_\varepsilon(z)=W(G_\varepsilon(z-\cdot))$ almost surely and $Q_\varepsilon$ is the covariance of~$\Psi_\varepsilon$. So $C_1^\varepsilon=\E[\Psi_\varepsilon(z)^2]$ is the Wick constant, and $C_2^\varepsilon=\E\bigl[(\Psi_\varepsilon^2-C_1^\varepsilon)(z)\,(G*(\Psi_\varepsilon^2-C_1^\varepsilon))(z)\bigr]$ is the logarithmically divergent constant. They grow like $\varepsilon^{-1}$ and $|\log\varepsilon|$ respectively~\cite[Remark~10.23]{Hai14}; this growth is not part of the statement.
+
+\paragraph{Classical solutions.} For fixed $\varepsilon>0$ the forcing is smooth and the equation has classical solutions.
+
+\begin{definition}
+\label{d.classical}
+Let $f\in C^\infty(\R\times\T)$, $c\in\R$ and $u_0\in C^\infty(\T)$. A \emph{classical solution} of
+\begin{equation}
+\label{e.classical}
+\partial_tu=\Delta u-u^3+cu+f\,, \qquad u(0,\cdot)=u_0\,,
+\end{equation}
+is a function $u\in C([0,\infty)\times\T)$ with $u(0,\cdot)=u_0$ which is smooth on $(0,\infty)\times\T$ and satisfies the equation pointwise there.
+\end{definition}
+
+Derivatives on~$\T$ are those of the periodic lift to~$\R^3$. Requiring smoothness instead of $C^{1,2}$ regularity does not change the solution: for smooth~$f$, every solution of class~$C^{1,2}$ is smooth on $(0,\infty)\times\T$ by parabolic regularity.
+
+\section{The statement}
+\label{s.statement}
+
+Fix a mass parameter $a\in\R$, smooth initial data $u_0\in C^\infty(\T)$, a regularity exponent $\eta\in(-\nf{2}{3},-\nf{1}{2})$, a mollifier $\rho\in\Mol$ and a space-time white noise~$W$ on $(\Omega,\mathcal{F},\Prob)$. For each $\varepsilon\in(0,1]$ let $\xi_\varepsilon$ be a regularised noise at scale~$\varepsilon$. For each $\omega\in\Omega$ let $u_\varepsilon(\omega)$ be the classical solution of
+\begin{equation}
+\label{e.renormalised}
+\partial_tu_\varepsilon=\Delta u_\varepsilon-u_\varepsilon^3+\bigl(a+3C_1^\varepsilon-9C_2^\varepsilon\bigr)u_\varepsilon+\xi_\varepsilon(\omega,\cdot)\,, \qquad u_\varepsilon(0,\cdot)=u_0\,.
+\end{equation}
+Lemma~\ref{l.meaning} below gives existence and uniqueness of~$\xi_\varepsilon$ up to indistinguishability, and of~$u_\varepsilon(\omega)$. Write $u_\varepsilon(t):=u_\varepsilon(\omega)(t,\cdot)\in C(\T)\subset\Cs^\eta$.
+
+\begin{maintheorem}
+\label{t.main}
+In this setting, there exist a random variable $\tau\colon\Omega\to(0,\infty]$ and, for each $\omega\in\Omega$, a continuous path $u(\omega,\cdot)\colon[0,\tau(\omega))\to\Cs^\eta$, with the following properties.
+\begin{enumerate}[label=\textup{(A\arabic*)}]
+\item \label{a.meas} $u(\omega,0)=u_0$ for every $\omega$, and for every $t\ge0$ the map $\omega\mapsto u(\omega,t)$ is measurable on $\{\tau>t\}$.
+\item \label{a.max} If $\tau(\omega)<\infty$, then $\sup_{t<\tau(\omega)}\|u(\omega,t)\|_\eta=\infty$.
+\item \label{a.conv} For every $T>0$ and $\delta>0$,
+\begin{equation}
+\label{e.conv}
+\lim_{\varepsilon\downarrow0}\Prob\Bigl(\tau>T\ \text{and}\ \sup_{0\le t\le T}\|u_\varepsilon(t)-u(t)\|_\eta>\delta\Bigr)=0\,.
+\end{equation}
+\item \label{a.indep} Let $\rho'\in\Mol$, and let $(\tau',u')$ satisfy \ref{a.meas}--\ref{a.conv} for the data $(a,u_0,\eta,\rho',W)$ in place of $(a,u_0,\eta,\rho,W)$. Then $\tau'=\tau$ almost surely, and almost surely $u'(t)=u(t)$ for all $t<\tau$.
+\end{enumerate}
+\end{maintheorem}
+
+Condition~\ref{a.max} says that $\tau$ is the maximal existence time of the limit in~$\Cs^\eta$: the time cannot be cut short artificially, since $u$ would then stay bounded up to~$\tau$. Condition~\ref{a.conv} is convergence in probability on every time interval on which the limit exists. The counterterm in~\eqref{e.renormalised} is the explicit one from~\eqref{e.constants}, not an unspecified divergent sequence. Condition~\ref{a.indep} is mollifier independence for these explicit constants. The next proposition shows that \ref{a.meas}--\ref{a.conv} determine $(\tau,u)$, so that \ref{a.indep} compares well-defined objects.
+
+\begin{proposition}
+\label{p.unique}
+Let $(\tau,u)$ and $(\tilde\tau,\tilde u)$ both satisfy \ref{a.meas}--\ref{a.conv} for the same data. Then $\tau=\tilde\tau$ almost surely, and almost surely $u(t)=\tilde u(t)$ for all $t<\tau$.
+\end{proposition}
+
+\begin{proof}
+Fix a rational $T>0$ and put $E_T:=\{\tau>T\}\cap\{\tilde\tau>T\}$. The paths are continuous, so suprema over $[0,T]$ may be taken over rational times; by~\ref{a.meas} the events below are measurable. For $\delta>0$ and every $\varepsilon$, the triangle inequality gives
+\begin{multline*}
+\Prob\Bigl(E_T\cap\Bigl\{\sup_{t\le T}\|u(t)-\tilde u(t)\|_\eta>2\delta\Bigr\}\Bigr) \\ \le \Prob\Bigl(\tau>T,\ \sup_{t\le T}\|u_\varepsilon(t)-u(t)\|_\eta>\delta\Bigr)+\Prob\Bigl(\tilde\tau>T,\ \sup_{t\le T}\|u_\varepsilon(t)-\tilde u(t)\|_\eta>\delta\Bigr)\,.
+\end{multline*}
+The left side does not depend on~$\varepsilon$, and by~\ref{a.conv} the right side tends to zero. So $u=\tilde u$ on $[0,T]$ almost surely on~$E_T$. Taking the union over rational~$T$, almost surely $u=\tilde u$ on $[0,\tau\wedge\tilde\tau)$.
+
+Suppose that $\tau<\tilde\tau$ on an event of positive probability, and take $\omega$ in it outside the exceptional null set. Then $\tau(\omega)<\infty$, and $\tilde u(\omega,\cdot)$ is continuous on the compact interval $[0,\tau(\omega)]\subset[0,\tilde\tau(\omega))$, hence bounded there. Since $u(\omega,\cdot)=\tilde u(\omega,\cdot)$ on $[0,\tau(\omega))$, this contradicts~\ref{a.max}. Exchanging the roles gives $\tau=\tilde\tau$ almost surely.
+\end{proof}
+
+The proof uses only monotonicity and subadditivity of~$\Prob$, so it also holds if $\Prob$ is read as an outer measure (convention~\ref{c.encodings} of Section~\ref{s.decisions}).
+
+\section{What makes the statement meaningful}
+\label{s.meaning}
+
+A statement that quantifies over white noises, regularised noises and classical solutions is vacuous unless these objects exist. The following facts are proved in the formalisation as separate theorems.
+
+\begin{lemma}
+\label{l.meaning}
+The following hold.
+\begin{enumerate}[label=\textup{(W\arabic*)}]
+\item \label{w.noise} Some probability space carries a space-time white noise.
+\item \label{w.version} For every white noise $W$, $\rho\in\Mol$ and $\varepsilon\in(0,1]$ a regularised noise at scale~$\varepsilon$ exists; any two are indistinguishable; and every regularised noise is jointly measurable on $\Omega\times(\R\times\T)$.
+\item \label{w.constants} each $\rho_{\varepsilon,z}$ is square-integrable; $G\in L^1(\R\times\T)$; for every~$z$ the integrands defining $G_\varepsilon(z)$ and $Q_\varepsilon(z)$ are integrable; $G_\varepsilon$ is bounded, integrable and continuous; $Q_\varepsilon$ is bounded and continuous; and $G_\varepsilon^2$ and $GQ_\varepsilon^2$ are integrable, so $C_1^\varepsilon$ and $C_2^\varepsilon$ are finite.
+\item \label{w.classical} For every $f\in C^\infty(\R\times\T)$, $c\in\R$ and $u_0\in C^\infty(\T)$, problem~\eqref{e.classical} has exactly one classical solution.
+\item \label{w.paths} For every classical solution~$u$ of~\eqref{e.classical}, the path $t\mapsto u(t,\cdot)$ is continuous from $[0,\infty)$ into~$\Cs^\eta$. If $u_\varepsilon(\omega)$ solves~\eqref{e.classical} with $f=\xi_\varepsilon(\omega,\cdot)$ for a regularised noise~$\xi_\varepsilon$, then $\omega\mapsto u_\varepsilon(t)$ is measurable for every $t\ge0$.
+\end{enumerate}
+\end{lemma}
+
+Items~\ref{w.noise} and~\ref{w.version} are Gaussian constructions with a Kolmogorov-type smoothness argument. Item~\ref{w.classical} follows from local existence and a comparison bound that the cubic term provides. Item~\ref{w.paths} follows from $\|\cdot\|_\eta\le\|\cdot\|_{L^\infty}$, uniform continuity of $u_\varepsilon$ on compact sets, and continuous dependence of~\eqref{e.classical} on~$f$. Proposition~\ref{p.unique} is proved as a companion theorem.
+
+\section{Relation to Hairer's theorem}
+\label{s.hairer}
+
+The source is~\cite[Theorem~1.15]{Hai14}: for $\alpha\in(-\nf{2}{3},-\nf{1}{2})$ there are constants $C_\varepsilon$ such that, for every $u_0\in C^\alpha(\T)$, the solutions of $\partial_tu_\varepsilon=\Delta u_\varepsilon+C_\varepsilon u_\varepsilon-u_\varepsilon^3+\xi_\varepsilon$ converge, and for suitably chosen constants the limit is independent of the mollifier. Convergence is understood up to explosion through stopped processes~\cite[Remarks~1.13, 1.16 and~1.18]{Hai14}. The proof combines Proposition~9.8 (abstract well-posedness), Theorem~10.22 (convergence of the renormalised models) and Proposition~9.10, which identifies the renormalised equation~\cite[(9.21)]{Hai14} with counterterm $(3C_1-9C_2)u_\varepsilon$. Theorem~\ref{t.main} departs from this as follows.
+\begin{enumerate}[label=\textup{(H\arabic*)}]
+\item \emph{Initial data} are smooth rather than in $C^\alpha$; rough data are not treated.
+\item \emph{Constants.} Theorem~\ref{t.main} names explicit constants instead of asserting that suitable ones exist. These are Hairer's~(10.33) and~(10.41) with~$G$ in place of his truncated kernel. The mass $a$ is added, the coupling is fixed to one, and the torus has side one.
+\item \emph{Convergence} is stated through the maximal existence time of the limit rather than by stopping at a level~$L$, and it is measured in the norm~\eqref{e.norm} on the closure of continuous functions rather than in $B^\alpha_{\infty,\infty}$.
+\item \emph{Mollifier independence} is asserted for the explicit constants, whereas~\cite{Hai14} asserts it for suitably chosen constants. This is a strengthening of the literal statement and is the subject of~\ref{v.constants} below.
+\end{enumerate}
+As in~\cite[\S10.5]{Hai14}, no symmetry is imposed on~$\rho$. The comparison rests on the following points; Section~\ref{s.verification} gives the arguments.
+\begin{enumerate}[label=\textup{(V\arabic*)}]
+\item \label{v.constants} \emph{Constants.} Hairer's truncated kernel~$K$ coincides with the heat kernel near the origin, is compactly supported, and annihilates polynomials up to some degree. Near the origin $G-K$ is $O(|z|_{\mathfrak s}^{-1})$ in the parabolic distance, so the differences $C_i^\varepsilon-C_i^{\varepsilon,K}$ converge as $\varepsilon\downarrow0$ to finite limits independent of~$\rho$. Hence the counterterm in~\eqref{e.renormalised} differs from Hairer's by a $\rho$-independent constant plus $o(1)$, that is, by a shift of~$a$, and~\ref{a.indep} follows from the $\rho$-independence of the limiting model in~\cite[Theorem~10.22]{Hai14}. The large-time and periodisation contributions of~$G$ are included in this comparison.
+\item \label{v.topology} \emph{Convergence notion.} Conditions~\ref{a.max} and~\ref{a.conv} follow from stopped convergence together with restarting the local theory from data in $\Cs^\eta$, $\eta>-\nf{2}{3}$. The corrected solution topology of~\cite{BCCH21} does not affect them.
+\item \label{v.meas} \emph{Measurability.} The limit constructed in the proof satisfies~\ref{a.meas} in the form stated.
+\item \label{v.symmetry} \emph{Symmetry.} The spectral-gap sources assume symmetries in law of the noise; \cite[(6)--(8)]{BOT25} includes spatial reflection. Mollified white noise has this symmetry only if $\rho$ is even in~$x$. Neither stochastic source~\cite{HS23} or~\cite{BH26} needs it (Section~\ref{s.verification}).
+\end{enumerate}
+
+\section{Conventions}
+\label{s.decisions}
+
+The following choices fix the meaning of the statement and of its definitions.
+\begin{enumerate}[label=\textup{(D\arabic*)}]
+\item Torus $\R^3/\Z^3$ with $\Delta=\sum_i\partial_i^2$, rather than side length~$2\pi$.
+\item \label{c.mass} Unit mass in~$G$. Another mass $m>0$ changes $C_1^\varepsilon$ and~$C_2^\varepsilon$ by amounts that converge to $\rho$-independent limits, by the argument of~\ref{v.constants}; this is not part of the statement.
+\item \label{c.symmetry} No symmetry is required of the mollifier: $\rho(t,-x)=\rho(t,x)$ is not assumed; see~\ref{v.symmetry}.
+\item One exponent $\eta\in(-\nf{2}{3},-\nf{1}{2})$ per statement, as above.
+\item Condition~\ref{a.indep} is part of Theorem~\ref{t.main}, and Proposition~\ref{p.unique} is a separate companion.
+\item Initial data are smooth; data $u_0\in C^\alpha$ are not treated.
+\item \label{c.encodings} Lean encodings that carry meaning: $\T$ as \texttt{UnitAddTorus (Fin 3)}; white noise as the family of Definition~\ref{d.noise}, indexed by square-integrable functions, rather than a measure on a space of distributions; $\Cs^\eta$ as the completion of $C(\T)$ for the seminorm~\eqref{e.norm}; solutions recorded as paths $t\mapsto u(t,\cdot)\in C(\T)$, with derivatives taken on the periodic lift; and $\Prob$ in~\eqref{e.conv} read as an outer measure.
+\item Off-domain values. The source defines $\gamma_t$, $p_t$ and $P_t$ only for $t>0$, and $\rho_\varepsilon$ and the constants only for $\varepsilon\in(0,1]$. The Lean functions are total, and their values outside these ranges carry no meaning; lemmas record the values at $t\le0$ and at $\varepsilon=0$. No statement uses them.
+\item In~\ref{w.paths}, measurability of $\omega\mapsto u_\varepsilon(t)$ is measurability into~$\Cs^\eta$ with its Borel $\sigma$-algebra, the same $\sigma$-algebra as in~\ref{a.meas}.
+\end{enumerate}
+
+
+\section{Comparison with Hairer's setting}
+\label{s.verification}
+
+\paragraph{(V1) The constants.} Let $H(t,x):=\1_{t>0}(4\pi t)^{-\nf{3}{2}}e^{-\nf{|x|^2}{4t}}$ on $\R\times\R^3$. Hairer's kernel~$K$ equals $H$ near the origin, is smooth away from it, and is compactly supported. We take its support in a parabolic ball of radius less than~$\nf{1}{4}$, which the construction allows. Then the spatial periodisation~$K^\sharp$ does not change~\cite[(10.33) and (10.41)]{Hai14}, and we write $C_i^{\varepsilon,K}$ for those constants. Put $R:=G-K^\sharp$. Near the origin $R=(e^{-t}-1)H$ up to a smooth function, and $|(e^{-t}-1)H(t,x)|\le tH(t,x)=(4\pi)^{-\nf{3}{2}}\,t^{-\nf{1}{2}}e^{-\nf{|x|^2}{4t}}\lesssim|z|_{\mathfrak s}^{-1}$, where $|z|_{\mathfrak s}=|t|^{\nf12}+|x|$: with $r:=|x|/\sqrt t$, one has $|z|_{\mathfrak s}\,t^{-\nf12}e^{-\nf{r^2}{4}}=(1+r)e^{-\nf{r^2}{4}}$, which is bounded. Away from the origin $R$ is smooth and decays like~$e^{-t}$. In the parabolic dimension five this gives $R\in L^p$ for $p<5$ and $G,K^\sharp\in L^q$ for $q<\nf{5}{3}$.
+
+For the first constant, $C_1^\varepsilon-C_1^{\varepsilon,K}=\int(R*\rho^\sharp_\varepsilon)\,((G+K^\sharp)*\rho^\sharp_\varepsilon)$. Mollification converges in $L^4$ and in $L^{\nf{4}{3}}$, so this tends to $\int R\,(G+K^\sharp)$, which does not involve~$\rho$. For the second, let $Q^K_\varepsilon$ be the covariance built from~$K^\sharp$ in the same way as~$Q_\varepsilon$ is built from~$G$. Then
+\begin{equation*}
+C_2^\varepsilon-C_2^{\varepsilon,K}=2\int R\,Q_\varepsilon^2+2\int K^\sharp\,(Q_\varepsilon-Q^K_\varepsilon)(Q_\varepsilon+Q^K_\varepsilon)\,.
+\end{equation*}
+Near the origin $|Q_\varepsilon|+|Q^K_\varepsilon|\lesssim|z|_{\mathfrak s}^{-1}$ and $|Q_\varepsilon-Q^K_\varepsilon|\lesssim1$, uniformly in~$\varepsilon$; the second bound holds because the difference is a sum of convolutions of a kernel of order $|z|_{\mathfrak s}^{-1}$ with one of order $|z|_{\mathfrak s}^{-3}$. All functions decay exponentially in time. The integrands are therefore dominated by multiples of $|z|_{\mathfrak s}^{-3}$ and $|z|_{\mathfrak s}^{-4}$, which are integrable in dimension five, and they converge pointwise to limits that do not involve~$\rho$. By dominated convergence, $3C_1^\varepsilon-9C_2^\varepsilon=3C_1^{\varepsilon,K}-9C_2^{\varepsilon,K}+\kappa+o(1)$ with $\kappa$ independent of~$\rho$. Hence $u_\varepsilon$ solves Hairer's renormalised equation~\cite[(9.21)]{Hai14} with mass $a+\kappa+o(1)$. The solution map of~\cite[Proposition~9.8]{Hai14} is continuous in the model and in the coefficient of the linear term, and the limiting model of~\cite[Theorem~10.22]{Hai14} does not depend on~$\rho$, so~\ref{a.indep} holds. The formalisation proves the convergence of the differences of the constants to $\rho$-independent limits as \texttt{Statements.constantsComparison}.
+
+\paragraph{(V2) Convergence notion.} Hairer's convergence~\cite[Remarks~1.13 and~1.16]{Hai14} is convergence in probability, for each level $L>0$ and time $T>0$, of the processes stopped when their norm first exceeds~$L$. On $\{\tau>T\}$ the limit is bounded on $[0,T]$. So for $L$ large and $\delta<1$ the stopped and unstopped processes agree on $[0,T]$ outside an event of small probability, which gives~\ref{a.conv}. For~\ref{a.max}: the local theory starts from any datum in $B^\eta_{\infty,\infty}(\T)\supset\Cs^\eta$ with $\eta>-\nf{2}{3}$, with an existence time bounded below in terms of the norm of the datum and of the model on a unit time window. Hence a solution that stays bounded in~$\Cs^\eta$ up to a finite time extends beyond it. The correction in~\cite[Remark~2.20]{BCCH21} concerns a metric on functions with blow-up and does not affect this stopped notion. However,~\ref{a.conv} does not follow from convergence in that metric alone, so the proof must use the stopped notion directly.
+
+\paragraph{(V3) Measurability.} The limit is the image of the limiting random model under the solution map, which is continuous~\cite[Proposition~9.8]{Hai14}. A continuous function of a random variable is measurable, which gives~\ref{a.meas}.
+
+\paragraph{(V4) Symmetry and periodic noise.} Neither~\cite{HS23} nor~\cite{BH26} assumes any symmetry of the noise or of the mollifier. So no symmetry of~$\rho$ is needed, as convention~\ref{c.symmetry} states. Every symbol of the $\Phi^4_3$ structure satisfies the degree conditions of~\cite[Assumption~2.31]{HS23} and~\cite[Theorem~19]{BH26}, provided $\kappa$ is irrational; the tightest case is~$\Psi^3$. We take~\cite{HS23} as the stochastic proof source, because its kernels, model topology and BPHZ model are those of~\cite[Theorem~10.22]{Hai14}. Three points are supplied by the formalisation; none of them affects the statement. First, both papers work on~$\R^4$, and space-periodic white noise does not satisfy their whole-space spectral gap. The formalisation proves the needed Gaussian moment bounds directly for the periodic noise, with $\Hil=L^2(\R\times\T)$. Second, \cite[Theorem~2.33]{HS23} is stated along dyadic scales, gives mollifier independence only in a remark, and its Lemma~6.4 uses $\rho\ge0$. The formalisation treats every $\varepsilon\in(0,1]$ and signed~$\rho$. Third, the BPHZ renormalisation is identified with Hairer's two-constant renormalisation for~$\Phi^4_3$.
+
+\paragraph{Measurability of white noise.} In Mathlib the image of a measure under a non-measurable map is a point mass, which counts as Gaussian, and the integral of a non-measurable function is zero. A version of Definition~\ref{d.noise} without measurability could therefore be satisfied by a non-measurable family. The Lean definition requires each $W(h)$ to be a random variable, as Definition~\ref{d.noise} says, and each Gaussian vector to be measurable; the example \texttt{tests/regression/FakeWhiteNoise.lean} shows that the non-measurable family is excluded.
+
+\begin{thebibliography}{BCCH21}
+
+\bibitem[BCCH21]{BCCH21} Y.~Bruned, A.~Chandra, I.~Chevyrev and M.~Hairer, \emph{Renormalising SPDEs in regularity structures}, J. Eur. Math. Soc. \textbf{23} (2021), 869--947. \href{https://arxiv.org/abs/1711.10239v4}{arXiv:1711.10239v4}.
+
+\bibitem[BH26]{BH26} I.~Bailleul and M.~Hoshino, \emph{Random models on regularity-integrability structures}. \href{https://arxiv.org/abs/2310.10202v4}{arXiv:2310.10202v4} (25 September 2026).
+
+\bibitem[BOT25]{BOT25} L.~Broux, F.~Otto and M.~Tempelmayr, \emph{Lecture notes on Malliavin calculus in regularity structures}, Stoch. PDE: Anal. Comp. (2025). \href{https://arxiv.org/abs/2401.05935v3}{arXiv:2401.05935v3}.
+
+\bibitem[Hai14]{Hai14} M.~Hairer, \emph{A theory of regularity structures}, Invent. Math. \textbf{198} (2014), 269--504. \href{https://arxiv.org/abs/1303.5113v4}{arXiv:1303.5113v4}.
+
+\bibitem[HS23]{HS23} M.~Hairer and R.~Steele, \emph{The BPHZ theorem for regularity structures via the spectral gap inequality}. \href{https://arxiv.org/abs/2301.10081v3}{arXiv:2301.10081v3}.
+
+\end{thebibliography}
+
+\end{document}
