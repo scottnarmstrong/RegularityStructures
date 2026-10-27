@@ -1,0 +1,20 @@
+{
+  "challenge_module": "comparators.GlobalDynamics.Challenge",
+  "solution_module": "comparators.GlobalDynamics.Solution",
+  "theorem_names": [
+    "GlobalDynamicsChallenge.globalDynamics",
+    "GlobalDynamicsChallenge.exists_whiteNoise",
+    "GlobalDynamicsChallenge.regularisedNoise_exists_unique",
+    "GlobalDynamicsChallenge.classicalSolution_exists_unique",
+    "GlobalDynamicsChallenge.constants_finite",
+    "GlobalDynamicsChallenge.heatAt_toHolderBesov",
+    "GlobalDynamicsChallenge.continuous_heatAt"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

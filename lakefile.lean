@@ -47,6 +47,22 @@ lean_lib «Phi43» where
   globs := #[.andSubmodules `Phi43]
   leanOptions := projectLeanOptions
 
+/-- The statements of the global theory (global dynamics, the uniform moment bound for the
+regularised equations, compatibility across Hölder exponents), one declaration per file, each
+proved by its proof in `GlobalPhi43`, together with the definitions they use
+(`GlobalPhi43Statements.Defs`). Built by default. -/
+@[default_target]
+lean_lib «GlobalPhi43Statements» where
+  globs := #[.andSubmodules `GlobalPhi43Statements]
+  leanOptions := statementLeanOptions
+
+/-- Global dynamics of the Φ⁴₃ equation on `T³`: the global flow, coming down from infinity, the
+Markov and Feller property, the invariant measure and the stationary solution. -/
+@[default_target]
+lean_lib «GlobalPhi43» where
+  globs := #[.andSubmodules `GlobalPhi43]
+  leanOptions := projectLeanOptions
+
 /-- Comparator configuration `comparators/TheoremA`: the Mathlib-only statement of Theorem A and
 its companion theorems, one intentional `sorry` per theorem. -/
 lean_lib «TheoremAChallenge» where
@@ -78,6 +94,42 @@ lean_lib «SchauderChallenge» where
 /-- The `comparators/Schauder` statements proved from the library. -/
 lean_lib «SchauderSolution» where
   roots := #[`comparators.Schauder.Solution]
+  leanOptions := projectLeanOptions
+
+/-- Comparator configuration `comparators/GlobalDynamics`: the Mathlib-only statement of the
+global dynamics of the Φ⁴₃ equation and its companion theorems, one intentional `sorry` per
+theorem. -/
+lean_lib «GlobalDynamicsChallenge» where
+  roots := #[`comparators.GlobalDynamics.Challenge]
+  leanOptions := projectLeanOptions
+
+/-- The `comparators/GlobalDynamics` statements proved from the library. -/
+lean_lib «GlobalDynamicsSolution» where
+  roots := #[`comparators.GlobalDynamics.Solution]
+  leanOptions := projectLeanOptions
+
+/-- Comparator configuration `comparators/RegularisedBound`: the Mathlib-only statement of the
+uniform moment bound for the regularised equations and its companion theorems, one intentional
+`sorry` per theorem. -/
+lean_lib «RegularisedBoundChallenge» where
+  roots := #[`comparators.RegularisedBound.Challenge]
+  leanOptions := projectLeanOptions
+
+/-- The `comparators/RegularisedBound` statements proved from the library. -/
+lean_lib «RegularisedBoundSolution» where
+  roots := #[`comparators.RegularisedBound.Solution]
+  leanOptions := projectLeanOptions
+
+/-- Comparator configuration `comparators/ExponentCompatibility`: the Mathlib-only statement of the
+compatibility of the global flows across Hölder exponents and its companion theorems, one
+intentional `sorry` per theorem. -/
+lean_lib «ExponentCompatibilityChallenge» where
+  roots := #[`comparators.ExponentCompatibility.Challenge]
+  leanOptions := projectLeanOptions
+
+/-- The `comparators/ExponentCompatibility` statements proved from the library. -/
+lean_lib «ExponentCompatibilitySolution» where
+  roots := #[`comparators.ExponentCompatibility.Solution]
   leanOptions := projectLeanOptions
 
 /-- Witnesses: the hypotheses of the statements and of the library theorems are jointly

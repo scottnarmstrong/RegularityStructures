@@ -1,0 +1,22 @@
+{
+  "challenge_module": "comparators.ExponentCompatibility.Challenge",
+  "solution_module": "comparators.ExponentCompatibility.Solution",
+  "theorem_names": [
+    "ExponentCompatibilityChallenge.exponentCompatibility",
+    "ExponentCompatibilityChallenge.exists_whiteNoise",
+    "ExponentCompatibilityChallenge.regularisedNoise_exists_unique",
+    "ExponentCompatibilityChallenge.classicalSolution_exists_unique",
+    "ExponentCompatibilityChallenge.constants_finite",
+    "ExponentCompatibilityChallenge.heatAt_toHolderBesov",
+    "ExponentCompatibilityChallenge.continuous_heatAt",
+    "ExponentCompatibilityChallenge.holderBesovEmbed_toHolderBesov",
+    "ExponentCompatibilityChallenge.continuous_holderBesovEmbed"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

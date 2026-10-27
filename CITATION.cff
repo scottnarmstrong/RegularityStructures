@@ -1,19 +1,26 @@
 cff-version: 1.2.0
 message: "If you use this formalization, please cite it as below."
-title: "RegularityStructures: a Lean 4 formalization of regularity structures and the dynamical Φ⁴₃ model"
+title: "RegularityStructures: a Lean 4 formalization of the dynamical Φ⁴₃ model via regularity structures"
 abstract: >-
-  A machine-checked Lean 4 / Mathlib formalization of the local well-posedness and
-  convergence of the renormalised dynamical Φ⁴₃ model on the three-dimensional torus,
-  after Hairer's Theorem 1.15 (A theory of regularity structures, 2014): for smooth
+  A machine-checked Lean 4 / Mathlib formalization of the renormalised dynamical Φ⁴₃
+  model on the three-dimensional torus: convergence, local well-posedness, and global
+  dynamics with an invariant measure and stationary solutions. The local theory follows
+  Hairer's Theorem 1.15 (A theory of regularity structures, 2014): for smooth
   initial data and explicit renormalisation constants, the solutions of the equation
   driven by mollified space-time white noise converge in probability in a negative
   Hölder–Besov space up to the maximal existence time of the limit, and the limit does
   not depend on the mollifier. A standalone library proves the general theory used:
   the reconstruction theorem, weighted reconstruction, the multilevel Schauder estimate,
-  maximal solutions, and Malliavin calculus for white noise.
+  maximal solutions, and Malliavin calculus for white noise. On top of it, the global
+  theory after Mourrat–Weber and Moinat–Weber: for every exponent in (-2/3, -1/2) a
+  global flow on the Hölder–Besov space, consistent with the local theory, that comes
+  down from infinity, is a Feller Markov process and has an invariant measure obtained
+  by the Krylov–Bogoliubov procedure, the law of a stationary solution; the uniform
+  moment bound for the regularised equations; and the compatibility of the flows across
+  Hölder exponents.
   The development contains no sorry and no custom axiom.
 type: software
-version: "1.0.0"
+version: "1.1.0"
 authors:
   - family-names: Armstrong
     given-names: Scott
@@ -27,6 +34,8 @@ keywords:
   - Φ⁴₃ model
   - renormalisation
   - stochastic quantisation
+  - invariant measure
+  - coming down from infinity
 license: Apache-2.0
 repository-code: "https://github.com/scottnarmstrong/RegularityStructures"
 references:
@@ -66,3 +75,35 @@ references:
       - type: other
         value: "arXiv:2301.10081"
     url: "https://arxiv.org/abs/2301.10081v3"
+  - type: article
+    title: "The dynamic Φ⁴₃ model comes down from infinity"
+    authors:
+      - family-names: Mourrat
+        given-names: Jean-Christophe
+      - family-names: Weber
+        given-names: Hendrik
+    journal: "Communications in Mathematical Physics"
+    volume: 356
+    start: 673
+    end: 753
+    year: 2017
+    identifiers:
+      - type: other
+        value: "arXiv:1601.01234"
+    url: "https://arxiv.org/abs/1601.01234v3"
+  - type: article
+    title: "Space-time localisation for the dynamic Φ⁴₃ model"
+    authors:
+      - family-names: Moinat
+        given-names: Augustin
+      - family-names: Weber
+        given-names: Hendrik
+    journal: "Communications on Pure and Applied Mathematics"
+    volume: 73
+    start: 2519
+    end: 2555
+    year: 2020
+    identifiers:
+      - type: other
+        value: "arXiv:1811.05764"
+    url: "https://arxiv.org/abs/1811.05764v1"

@@ -1,0 +1,18 @@
+{
+  "challenge_module": "comparators.RegularisedBound.Challenge",
+  "solution_module": "comparators.RegularisedBound.Solution",
+  "theorem_names": [
+    "RegularisedBoundChallenge.regularisedBound",
+    "RegularisedBoundChallenge.exists_whiteNoise",
+    "RegularisedBoundChallenge.regularisedNoise_exists_unique",
+    "RegularisedBoundChallenge.classicalSolution_exists_unique",
+    "RegularisedBoundChallenge.constants_finite"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

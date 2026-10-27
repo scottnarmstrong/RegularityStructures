@@ -1,8 +1,8 @@
 # Proof route and library map
 
-This page describes how the proof of Theorem A is organised and where each part of the formalization lives. The main
-results themselves are listed in [main-results.md](main-results.md); [Hai14], [Hos25], [HS23] and [BH26] are cited as in
-the [README](../README.md).
+This page describes how the proofs of Theorem A and of the global dynamics are organised and where each part of the
+formalization lives. The main results themselves are listed in [main-results.md](main-results.md); [Hai14], [Hos25],
+[HS23], [BH26], [MW17] and [MW20] are cited as in the [README](../README.md).
 
 ## What is formalized from [Hai14]
 
@@ -56,6 +56,29 @@ convergence of the noise potentials ([`phi43Noise_cauchy`](../Phi43Statements/St
 constants, the equivalence of norms, and the stopped continuity of the solution map
 ([`phi43ClassicalSolution_stoppedContinuity`](../Phi43Statements/Steps/ClassicalSolutionStoppedContinuity.lean)).
 
+## The global dynamics
+
+The global theory uses the local theory of Theorem A as proved, through its statements in `Phi43Statements`.
+
+1. **The local estimate.** [MW20, Theorem 2.1], adapted to solutions with smooth defects
+   (`GlobalPhi43.mw20DefectBound`), is proved from the MW20 setting (`GlobalPhi43/MW20/Setting`): the test kernels,
+   the parabolic cylinders and seminorms, Lemma 2.7, Theorem 2.8, Lemmas 2.9–2.10 and Corollary 2.12, with the
+   corrections recorded in the errata.
+2. **Attachment to Theorem A.** The solutions of Theorem A are written in the form of the local estimate, with the
+   trees of the canonical model and smooth defects; the bound on the model on compact sets
+   (`GlobalPhi43.modelTestBound`) and the time translation of the model (`GlobalPhi43.translationInterface`) give the
+   moments. This proves the uniform moment bound for the regularised equations.
+3. **The global flow.** The moment bound excludes explosion, so the limits of Theorem A exist for all times and all
+   starts; they are extended from smooth to all data in $`\mathcal C^\eta`$ by continuity, on one event of probability
+   one, which gives (B1)–(B3) and (B5). Coming down from infinity (B4) follows from the moment bound by Fatou's lemma
+   over a countable dense set of data and the continuity in (B1).
+4. **Markov process and invariant measure.** Adaptedness and time homogeneity give the Markov and Feller properties
+   (B6). The sublevel sets of the stronger norms are relatively compact in $`\mathcal C^\eta`$
+   (`GlobalPhi43.compactSublevel`), so the time averages of the laws are tight, and the Krylov–Bogoliubov procedure gives
+   the invariant measure (B7) and the stationary solution (B8).
+5. **Compatibility across exponents.** For each exponent the flow is built from the same approximants; the embedding
+   $`\mathcal C^{\eta''}\to\mathcal C^\eta`$ commutes with their limits, and density extends the identity to all data.
+
 ## Library map
 
 Each main result has its own short file, stating it with its definitions; its proof is in the topic directories below.
@@ -76,5 +99,11 @@ lines.
 | [`Phi43/FixedPointF`](../Phi43/FixedPointF/), [`Potential`](../Phi43/Potential/), [`Inhomogeneity`](../Phi43/Inhomogeneity/), [`Restart`](../Phi43/Restart/), [`Persistence`](../Phi43/Persistence/), [`LocalLipschitz`](../Phi43/LocalLipschitz/), [`Reconstruction`](../Phi43/Reconstruction/), [`Identification`](../Phi43/Identification/) | The deterministic solution map: the fixed point, potentials, restarts, local Lipschitz dependence, and the identification with classical solutions |
 | [`Phi43/ClassicalSolution`](../Phi43/ClassicalSolution/), [`Phi43/Torus`](../Phi43/Torus/) | Classical solutions and kernel bounds on the torus |
 | [`Phi43/TheoremA`](../Phi43/TheoremA/) | The assembly of Theorem A |
+| [`GlobalPhi43Statements`](../GlobalPhi43Statements/) | The global dynamics, the uniform moment bound for the regularised equations and the compatibility across Hölder exponents, one per file; [`Defs`](../GlobalPhi43Statements/Defs/), the clauses (B1)–(B8) and the objects they use |
+| [`GlobalPhi43/MW20`](../GlobalPhi43/MW20/) | The MW20 setting ([`Setting`](../GlobalPhi43/MW20/Setting/)) and the local estimate with smooth defects |
+| [`GlobalPhi43/Local`](../GlobalPhi43/Local/), [`GlobalPhi43/Attachment`](../GlobalPhi43/Attachment/) | The local Schauder and maximum-principle arguments, and the attachment of the local estimate to the solutions of Theorem A |
+| [`GlobalPhi43/Flow`](../GlobalPhi43/Flow/), [`GlobalPhi43/Assembly`](../GlobalPhi43/Assembly/) | The global flow from all data and all starts, coming down from infinity and the moments of the stronger norms |
+| [`GlobalPhi43/Markov`](../GlobalPhi43/Markov/), [`GlobalPhi43/Invariant`](../GlobalPhi43/Invariant/), [`GlobalPhi43/Compactness`](../GlobalPhi43/Compactness/), [`GlobalPhi43/Probability`](../GlobalPhi43/Probability/) | The Markov and Feller properties, compact sublevel sets, the Krylov–Bogoliubov invariant measure and the stationary solution |
+| [`GlobalPhi43/Compatibility`](../GlobalPhi43/Compatibility/), [`GlobalPhi43/Proofs`](../GlobalPhi43/Proofs/) | Compatibility across exponents, and the proofs of the statements in `GlobalPhi43Statements` |
 | [`tests`](../tests/) | Examples: [`Witnesses`](../tests/Witnesses/), showing that the hypotheses of the statements are jointly satisfiable, and [`regression`](../tests/regression/), showing that the definitions exclude degenerate objects |
-| [`comparators`](../comparators/) | The three Mathlib-only comparator configurations |
+| [`comparators`](../comparators/) | The six Mathlib-only comparator configurations |

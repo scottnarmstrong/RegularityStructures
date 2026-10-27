@@ -4,9 +4,10 @@ version: "v0.4"
 project:
   name: "Regularity structures and dynamical Phi^4_3"
   description: >-
-    A Lean 4 / Mathlib formalization of the local well-posedness and convergence of
-    the renormalised dynamical Phi^4_3 model on the three-dimensional torus, after
-    Hairer's Theorem 1.15. For smooth initial data, explicit renormalisation
+    A Lean 4 / Mathlib formalization of the renormalised dynamical Phi^4_3 model on
+    the three-dimensional torus: convergence, local well-posedness, and global
+    dynamics with an invariant measure and stationary solutions. The local theory
+    follows Hairer's Theorem 1.15: for smooth initial data, explicit renormalisation
     constants built from the massive heat kernel, and every exponent eta in
     (-2/3, -1/2), the solutions of the equation driven by mollified space-time white
     noise converge in probability in the Hölder–Besov space C^eta up to the maximal
@@ -14,7 +15,13 @@ project:
     standalone library proves the general theory used: the reconstruction theorem
     (Hairer, Theorem 3.10; Hoshino, Theorem 4.1), weighted reconstruction, the
     multilevel Schauder estimate (Hairer, Theorem 5.12), maximal solutions, and
-    Malliavin calculus for white noise.
+    Malliavin calculus for white noise. On top of it, the global theory after
+    Mourrat and Weber and Moinat and Weber: for every exponent eta in (-2/3, -1/2) a
+    global flow on C^eta, adapted to the noise and consistent with Theorem A, that
+    comes down from infinity, is a Feller Markov process and has an invariant measure
+    obtained by the Krylov-Bogoliubov procedure, which is the law of a stationary
+    solution; the uniform moment bound for the regularised equations behind it; and
+    the compatibility of these flows across Hölder exponents.
   authors:
     - "Scott Armstrong"
   responsible_maintainers:
@@ -68,6 +75,36 @@ sources:
     note: "Methodological comparison for the convergence of the renormalised models."
     license: "all rights reserved"
     author_endorsement: "not-contacted"
+  - title: "The dynamic Phi^4_3 model comes down from infinity"
+    authors:
+      - "Jean-Christophe Mourrat"
+      - "Hendrik Weber"
+    type: "paper"
+    location: "Communications in Mathematical Physics 356 (2017), 673-753; arXiv:1601.01234v3"
+    relationship: "adapts"
+    note: "Coming down from infinity, the bound (1.27), on the unit torus with the constants of Theorem A; the global flow, its Markov property and the invariant measure."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "Space-time localisation for the dynamic Phi^4_3 model"
+    authors:
+      - "Augustin Moinat"
+      - "Hendrik Weber"
+    type: "paper"
+    location: "Communications on Pure and Applied Mathematics 73 (2020), 2519-2555; arXiv:1811.05764v1"
+    relationship: "adapts"
+    note: "Theorem 2.1, adapted to solutions with smooth defects, with Lemma 2.7, Theorem 2.8, Lemmas 2.9-2.10 and Corollary 2.12 as corrected in docs/ERRATA-AND-DEVIATIONS.md; the basis of the uniform moment bound."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+  - title: "Ergodicity for Infinite Dimensional Systems"
+    authors:
+      - "Giuseppe Da Prato"
+      - "Jerzy Zabczyk"
+    type: "book"
+    location: "Cambridge University Press, 1996; DOI 10.1017/CBO9780511662829"
+    relationship: "background"
+    note: "The Krylov-Bogoliubov construction of an invariant measure."
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
   - title: "Renormalised dynamical Phi^4_3 on the three-torus: the statement formalised in Lean"
     authors:
       - "Scott Armstrong"
@@ -97,7 +134,10 @@ status:
     non-integrality conditions that can be stronger, and state only the first part
     of Theorem 5.12; they assume joint measurability of the model, and the identity
     (5.17) also assumes a global model bound up to level gamma + 2. The maximal-solution statements are the abstract patching argument behind
-    Proposition 7.11.
+    Proposition 7.11. The global theory is for smooth initial data replaced by the
+    whole state space C^eta, the unit torus, the constants of Theorem A and every
+    eta in (-2/3, -1/2); the invariant measure is not claimed to be unique, the
+    strong Feller property is not claimed, and the stationary solution is one-sided.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -214,6 +254,24 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       literature_dependencies: []
+    - declaration: "GlobalPhi43.Statements.globalDynamics"
+      file: "GlobalPhi43Statements/GlobalDynamics.lean"
+      comparator_config: "comparators/GlobalDynamics/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "GlobalPhi43.Statements.regularisedBound"
+      file: "GlobalPhi43Statements/RegularisedBound.lean"
+      comparator_config: "comparators/RegularisedBound/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "GlobalPhi43.Statements.exponentCompatibility"
+      file: "GlobalPhi43Statements/ExponentCompatibility.lean"
+      comparator_config: "comparators/ExponentCompatibility/comparator.json"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
 
 automation:
   methods:
@@ -233,7 +291,7 @@ automation:
         the author before its proof was developed. Verification uses full builds from
         a clean checkout and axiom checks of the main results.
       cost:
-        wall_time: "about three days of development (23 to 25 October 2026) plus release preparation"
+        wall_time: "about four days of development (23 to 26 October 2026) plus release preparation"
         spend_usd: "not separately tracked (ChatGPT Pro and Claude Max subscriptions)"
         hardware: "one 8-CPU / 30 GB RAM Linux machine"
       prompting_notes: >-
@@ -254,7 +312,9 @@ fidelity:
     convergence up to the maximal existence time of the limit instead of stopped
     processes. Reconstruction and the Schauder estimate are proved with a
     regularising semigroup, a finite graded basis and global bounds, with the
-    degree restrictions listed under status.scope. docs/ERRATA-AND-DEVIATIONS.md
+    degree restrictions listed under status.scope. The global theory is stated on the
+    unit torus with the constants of Theorem A; the local estimate of Moinat and
+    Weber is adapted to solutions with smooth defects. docs/ERRATA-AND-DEVIATIONS.md
     records every erratum and deviation with its effect on the stated theorems.
 
 review:
@@ -289,6 +349,15 @@ alignment:
   - source: "Hairer, A theory of regularity structures, Proposition 7.11"
     lean: "RegularityStructures.Statements.exists_maximal_solution"
     note: "The abstract patching argument behind Proposition 7.11, for a solution relation with local existence, uniqueness, restriction and gluing."
+  - source: "Mourrat and Weber 2017, and Moinat and Weber 2020: global dynamics"
+    lean: "GlobalPhi43.Statements.globalDynamics"
+    note: "Global flow on C^eta adapted to the noise, consistent with Theorem A, coming down from infinity (Mourrat-Weber (1.27)), time homogeneous, Feller Markov, with a Krylov-Bogoliubov invariant measure that is the law of a stationary solution."
+  - source: "Moinat and Weber 2020, Theorem 2.1 (adapted); Mourrat and Weber 2017, (1.27)"
+    lean: "GlobalPhi43.Statements.regularisedBound"
+    note: "Moments of sup over smooth data and t in (0, 1] of sqrt(t) times the C^eta' norm of the regularised solutions, bounded uniformly in the regularisation by a constant chosen before the probability space."
+  - source: "Compatibility across Hölder exponents"
+    lean: "GlobalPhi43.Statements.exponentCompatibility"
+    note: "The global flows for all eta in (-2/3, -1/2) chosen at once; for each admissible pair eta < eta'' < -1/2, almost surely the embedding of C^eta'' into C^eta intertwines the two flows for every 0 <= s <= t and every datum."
 
 acknowledgements: >-
   Scott Armstrong was supported by the European Research Council (ERC) under the
